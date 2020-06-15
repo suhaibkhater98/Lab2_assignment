@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="Company" Class="linkDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\Company.mdf;Integrated Security=True;Connect Timeout=30" SettingsObjectName="Post_7.Properties.Settings" SettingsPropertyName="CompanyConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Department" Member="Departments">
+    <Type Name="Department">
+      <Column Name="Dep_Number" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Dep_Name" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Manager_ssn" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Manager_StartDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="Department_Employee" Member="Employees" ThisKey="Dep_Number" OtherKey="dep_no" Type="Employee" />
+      <Association Name="Department_Project" Member="Projects" ThisKey="Dep_Number" OtherKey="D_NO" Type="Project" />
+      <Association Name="Employee_Department" Member="Employee" ThisKey="Manager_ssn" OtherKey="ssn" Type="Employee" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Employee" Member="Employees">
+    <Type Name="Employee">
+      <Column Name="ssn" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="first_name" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="last_name" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="birth_date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="gander" Type="System.String" DbType="Char(10)" CanBeNull="true" />
+      <Column Name="salary" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="dep_no" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Employee_Department" Member="Departments" ThisKey="ssn" OtherKey="Manager_ssn" Type="Department" />
+      <Association Name="Employee_Works_On" Member="Works_Ons" ThisKey="ssn" OtherKey="E_SSN" Type="Works_On" />
+      <Association Name="Department_Employee" Member="Department" ThisKey="dep_no" OtherKey="Dep_Number" Type="Department" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Project" Member="Projects">
+    <Type Name="Project">
+      <Column Name="P_Number" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="P_Name" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="D_NO" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Project_Works_On" Member="Works_Ons" ThisKey="P_Number" OtherKey="P_No" Type="Works_On" />
+      <Association Name="Department_Project" Member="Department" ThisKey="D_NO" OtherKey="Dep_Number" Type="Department" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Works_On" Member="Works_Ons">
+    <Type Name="Works_On">
+      <Column Name="E_SSN" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="P_No" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Hours" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Association Name="Employee_Works_On" Member="Employee" ThisKey="E_SSN" OtherKey="ssn" Type="Employee" IsForeignKey="true" />
+      <Association Name="Project_Works_On" Member="Project" ThisKey="P_No" OtherKey="P_Number" Type="Project" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>
